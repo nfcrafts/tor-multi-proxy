@@ -1,0 +1,20 @@
+{
+  "name": "tor-multi-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "child-process": "^1.0.2",
+    "coffee-script": "^1.12.3",
+    "express": "^4.14.1",
+    "mkdir-recursive": "^0.2.3",
+    "request": "^2.79.0",
+    "socks5-http-client": "^1.0.2",
+    "socks5-https-client": "^1.2.0"
+  }
+}

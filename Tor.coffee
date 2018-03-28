@@ -31,7 +31,7 @@ Tor::run = ->
 
     @process.stdout.on 'data', (data) =>
       if data.toString().indexOf('Bootstrapped 100%: Done') > 0
-        @active = true
+        
         resolve "ready"
 
     @process.on 'exit', (code, signal) =>
@@ -40,11 +40,20 @@ Tor::run = ->
         reject code
   .then =>
     @getIp()
+  .then (ip) =>
+    @active = true 
+    Promise.resolve ip
 
 Tor::stop = ->
   @process.kill()
   @active = false
   Promise.resolve()
+
+Tor::restart = ->
+  @stop()
+  @run()
+  .catch (err) =>
+    console.log err
 
 Tor::parseConfigFile = ->
   
@@ -77,6 +86,7 @@ Tor::getIp = ->
     url: 'https://api.ipify.org/'
   .then (data) =>
     @ip = data
+    console.log @ip
     Promise.resolve data
 
 Tor::makeRequest = (options) ->
@@ -129,8 +139,12 @@ Tor.makeRequest = (tors, options) ->
   tors = Tor.getActiveTors tors
   tors = Tor.getDifferentIpTors tors
   tor = Tor.getMaxLastUse tors
-  console.log "Making require trough tor##{tor.id}"
+  console.log "Making request through tor##{tor.id} with ip #{tor.ip}"
   lastIp = tor.ip
   tor.makeRequest options
+  .then (res) ->
+    Promise.resolve res
+  , (err) ->
+    Promise.reject err
 
 module.exports = Tor

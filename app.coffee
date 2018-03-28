@@ -5,7 +5,7 @@ emitter = new EventEmitter
 
 Tor = require './Tor.coffee'
 
-tors = Tor.generateTors 100
+tors = Tor.generateTors 50
 
 for tor in tors
   do ->
@@ -15,7 +15,6 @@ for tor in tors
     _tor.run()
     .then ->
       emitter.emit "tor#{_tor.id}.ready"
-      console.log _tor.ip
     , (err) ->
       console.log "tor#{_tor.id}.error"
       console.log err
